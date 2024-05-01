@@ -23,8 +23,7 @@ public class AuthenticationService {
     public JwtAuthenticationResponse signup(SignUpRequest request) {
         var user = User
                 .builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
@@ -37,8 +36,8 @@ public class AuthenticationService {
 
     public JwtAuthenticationResponse signin(SignInRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userService.userDetailsService().loadUserByUsername(request.getEmail());
+                new UsernamePasswordAuthenticationToken(request.getEmailOrUsername(), request.getPassword()));
+        var user = userService.userDetailsService().loadUserByUsername(request.getEmailOrUsername());
         var jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }

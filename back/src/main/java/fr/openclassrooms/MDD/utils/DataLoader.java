@@ -22,8 +22,7 @@ public class DataLoader implements CommandLineRunner {
         if (userService.count() == 0) {
             User admin = User
                     .builder()
-                    .firstName("admin")
-                    .lastName("admin")
+                    .username("admin")
                     .email("admin@admin.com")
                     .password(passwordEncoder.encode("admin"))
                     .role(Role.ROLE_ADMIN)

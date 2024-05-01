@@ -16,8 +16,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDetailsService userDetailsService() {
-        return username -> userRepository
-                .findByEmail(username)
+        return emailOrUsername -> userRepository
+                .findByEmailOrUsername(emailOrUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 

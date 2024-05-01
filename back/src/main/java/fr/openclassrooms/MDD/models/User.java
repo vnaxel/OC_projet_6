@@ -23,9 +23,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String firstName;
-
-    String lastName;
+    String username;
 
     @Column(unique = true)
     String email;
@@ -38,6 +36,15 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     Role role;
+
+    @OneToMany
+    List<Comment> comments;
+
+    @Enumerated(EnumType.STRING)
+    List<Topic> interestedTopics;
+
+    @OneToMany
+    List<Publication> publications;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

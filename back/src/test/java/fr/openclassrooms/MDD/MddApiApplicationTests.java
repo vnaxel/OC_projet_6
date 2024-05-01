@@ -1,4 +1,4 @@
-package fr.learn.springsecurity6authserver;
+package fr.openclassrooms.MDD;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
