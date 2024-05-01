@@ -6,4 +6,4 @@ TODO :
 
 ## Backend :
 
-### Service and controller layer for Publication and Comments
+### Service, DTOs and controller layer for Publication and Comments
