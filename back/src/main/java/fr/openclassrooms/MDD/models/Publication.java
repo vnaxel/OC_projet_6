@@ -36,19 +36,22 @@ public class Publication {
     Topic topic;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "publication")
     List<Comment> comments;
 
     public PublicationDto toDto() {
         return PublicationDto.builder()
+                .id(this.id)
                 .title(this.title)
                 .content(this.content)
                 .author(this.user.toDto())
                 .topic(this.topic)
                 .created_at(this.createdAt)
                 .updated_at(this.updatedAt)
+                .comments(this.comments.stream().map(Comment::toDto).toList())
                 .build();
     }
 }

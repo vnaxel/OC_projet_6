@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Set<Topic> interestedTopics;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     List<Publication> publications;
 
     @Override

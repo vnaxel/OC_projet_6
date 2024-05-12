@@ -21,7 +21,7 @@ public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
 
-    public PublicationDto save(PublicationRequest publicationRequest, UserDetails userDetails) {
+    public PublicationDto createPublication(PublicationRequest publicationRequest, UserDetails userDetails) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -53,5 +53,11 @@ public class PublicationService {
                 .stream()
                 .map(Publication::toDto)
                 .toList();
+    }
+
+    public PublicationDto getPublicationById(Long id) {
+        return publicationRepository.findById(id)
+                .map(Publication::toDto)
+                .orElseThrow(() -> new RuntimeException("Publication not found"));
     }
 }

@@ -1,5 +1,6 @@
 package fr.openclassrooms.MDD.models;
 
+import fr.openclassrooms.MDD.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,17 @@ public class Comment {
     LocalDateTime updatedAt;
 
     @ManyToOne
+    @JoinColumn(name="publication_id")
     Publication publication;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     User user;
+
+    public CommentDto toDto() {
+        return CommentDto.builder()
+                .content(this.content)
+                .author(this.user.toDto())
+                .build();
+    }
 }

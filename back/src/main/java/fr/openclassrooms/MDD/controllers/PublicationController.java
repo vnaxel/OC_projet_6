@@ -22,7 +22,7 @@ public class PublicationController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody PublicationRequest publicationRequest
     ) {
-        PublicationDto publicationDto = publicationService.save(publicationRequest, userDetails);
+        PublicationDto publicationDto = publicationService.createPublication(publicationRequest, userDetails);
         return ResponseEntity.ok(publicationDto);
     }
 
@@ -31,5 +31,12 @@ public class PublicationController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         return ResponseEntity.ok(publicationService.getAllPublicationsForUser(userDetails));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPublicationById(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(publicationService.getPublicationById(id));
     }
 }
