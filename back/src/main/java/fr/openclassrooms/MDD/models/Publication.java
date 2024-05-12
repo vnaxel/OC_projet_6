@@ -1,5 +1,6 @@
 package fr.openclassrooms.MDD.models;
 
+import fr.openclassrooms.MDD.dto.PublicationDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -39,4 +40,15 @@ public class Publication {
 
     @OneToMany
     List<Comment> comments;
+
+    public PublicationDto toDto() {
+        return PublicationDto.builder()
+                .title(this.title)
+                .content(this.content)
+                .author(this.user.toDto())
+                .topic(this.topic)
+                .created_at(this.createdAt)
+                .updated_at(this.updatedAt)
+                .build();
+    }
 }

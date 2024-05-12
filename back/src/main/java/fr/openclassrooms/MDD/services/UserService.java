@@ -84,8 +84,4 @@ public class UserService {
                 .updated_at(user.getUpdatedAt())
                 .build();
     }
-
-    public long count() {
-        return userRepository.count();
-    }
 }

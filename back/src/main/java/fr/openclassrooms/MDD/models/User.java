@@ -1,5 +1,6 @@
 package fr.openclassrooms.MDD.models;
 
+import fr.openclassrooms.MDD.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -70,5 +71,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto toDto() {
+        return UserDto.builder()
+                .email(email)
+                .username(username)
+                .interestedTopics(interestedTopics)
+                .created_at(createdAt)
+                .updated_at(updatedAt)
+                .build();
     }
 }
