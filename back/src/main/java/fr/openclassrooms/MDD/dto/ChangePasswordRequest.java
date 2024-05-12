@@ -1,8 +1,6 @@
 package fr.openclassrooms.MDD.dto;
 
-import fr.openclassrooms.MDD.utils.PasswordMatches;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import fr.openclassrooms.MDD.utils.FieldsValueMatch;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -11,13 +9,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Annotation;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@PasswordMatches
+@FieldsValueMatch(field = "newPassword", fieldMatch = "confirmPassword", message = "Passwords do not match")
 public class ChangePasswordRequest {
 
     @NotBlank(message = "Old password is required")

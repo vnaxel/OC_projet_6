@@ -9,14 +9,18 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Security;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -32,7 +36,11 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<?> updateMe(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdateUserRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> updateMe(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody UpdateUserRequest request,
+            HttpServletResponse response
+    ) {
         UserDto userDto = userService.updateUser(userDetails, request);
         Cookie updatedUsercookie = authenticationService.updateUserCookie(request);
         updatedUsercookie.setPath("/");
@@ -41,7 +49,10 @@ public class UserController {
     }
 
     @PutMapping("/me/password")
-    public ResponseEntity<UserDto> changePassword(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<?> changePassword(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody ChangePasswordRequest request) {
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            return ResponseEntity.badRequest().body("Passwords do not match");
+        }
         return ResponseEntity.ok(userService.changePassword(userDetails, request));
     }
 }

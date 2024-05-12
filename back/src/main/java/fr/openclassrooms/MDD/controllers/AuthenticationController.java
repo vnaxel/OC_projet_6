@@ -5,6 +5,7 @@ import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.services.AuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignUpRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> signup(@RequestBody @Valid SignUpRequest request, HttpServletResponse response) {
         Cookie cookie = authenticationService.signup(request);
         cookie.setPath("/");
         response.addCookie(cookie);
