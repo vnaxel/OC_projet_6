@@ -4,7 +4,6 @@ import fr.openclassrooms.MDD.dto.SignInRequest;
 import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.services.AuthenticationService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,21 +22,23 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest request, HttpServletResponse response) {
         Cookie cookie = authenticationService.signup(request);
+        cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<Void> signin(@RequestBody SignInRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> signin(@RequestBody SignInRequest request, HttpServletResponse response) {
         Cookie cookie = authenticationService.signin(request);
+        cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<Void> signout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("token", "");
-        cookie.setMaxAge(0);
+    public ResponseEntity<?> signout(HttpServletResponse response) {
+        Cookie cookie = authenticationService.signout();
+        cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseEntity.noContent().build();
     }

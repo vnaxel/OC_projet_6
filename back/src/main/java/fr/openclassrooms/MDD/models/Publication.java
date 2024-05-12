@@ -1,6 +1,7 @@
 package fr.openclassrooms.MDD.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,14 +20,17 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotNull
     String title;
 
+    @NotNull
     String content;
 
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     Topic topic;
 

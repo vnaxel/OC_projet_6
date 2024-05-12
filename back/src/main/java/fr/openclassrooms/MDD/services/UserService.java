@@ -5,7 +5,11 @@ import fr.openclassrooms.MDD.dto.UpdateUserRequest;
 import fr.openclassrooms.MDD.dto.UserDto;
 import fr.openclassrooms.MDD.models.User;
 import fr.openclassrooms.MDD.repositories.UserRepository;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-
 
     public UserDetailsService userDetailsService() {
         return emailOrUsername -> userRepository
@@ -38,7 +43,7 @@ public class UserService {
     }
 
     public UserDto getAuthenticatedUser(UserDetails userDetails) {
-        var user = userRepository.findByEmail(userDetails.getUsername())
+        var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return UserDto.builder()
@@ -51,7 +56,7 @@ public class UserService {
     }
 
     public UserDto updateUser(UserDetails userDetails, UpdateUserRequest updateUserRequest) {
-        var user = userRepository.findByEmail(userDetails.getUsername())
+        var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         user.setUsername(updateUserRequest.getUsername());
@@ -68,7 +73,7 @@ public class UserService {
     }
 
     public UserDto changePassword (UserDetails userDetails, ChangePasswordRequest request) {
-        var user = userRepository.findByEmail(userDetails.getUsername())
+        var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Old password is incorrect");
