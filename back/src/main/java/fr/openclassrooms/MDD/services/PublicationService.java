@@ -21,37 +21,37 @@ public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
 
-        public PublicationDto save(PublicationRequest publicationRequest, UserDetails userDetails) {
-            var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public PublicationDto save(PublicationRequest publicationRequest, UserDetails userDetails) {
+        var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            var publication = Publication.builder()
-                    .title(publicationRequest.getTitle())
-                    .content(publicationRequest.getContent())
-                    .topic(Topic.valueOf(publicationRequest.getTopic()))
-                    .user(user)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(null)
-                    .build();
+        var publication = Publication.builder()
+                .title(publicationRequest.getTitle())
+                .content(publicationRequest.getContent())
+                .topic(Topic.valueOf(publicationRequest.getTopic()))
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .build();
 
-            publication = publicationRepository.save(publication);
-            return PublicationDto.builder()
-                    .title(publication.getTitle())
-                    .content(publication.getContent())
-                    .author(publication.getUser().toDto())
-                    .topic(publication.getTopic())
-                    .created_at(publication.getCreatedAt())
-                    .updated_at(publication.getUpdatedAt())
-                    .build();
-        }
+        publication = publicationRepository.save(publication);
+        return PublicationDto.builder()
+                .title(publication.getTitle())
+                .content(publication.getContent())
+                .author(publication.getUser().toDto())
+                .topic(publication.getTopic())
+                .created_at(publication.getCreatedAt())
+                .updated_at(publication.getUpdatedAt())
+                .build();
+    }
 
-        public List<PublicationDto> getAllPublicationsForUser(UserDetails userDetails) {
-            var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public List<PublicationDto> getAllPublicationsForUser(UserDetails userDetails) {
+        var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            return publicationRepository.findAllByTopicInOrderByCreatedAtDesc(user.getInterestedTopics())
-                    .stream()
-                    .map(Publication::toDto)
-                    .toList();
-        }
+        return publicationRepository.findAllByTopicInOrderByCreatedAtDesc(user.getInterestedTopics())
+                .stream()
+                .map(Publication::toDto)
+                .toList();
+    }
 }

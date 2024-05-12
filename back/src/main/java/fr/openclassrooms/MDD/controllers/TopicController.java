@@ -23,12 +23,18 @@ public class TopicController {
     }
 
     @PutMapping({"/subscribe/{topic}"})
-    public ResponseEntity<?> subscribeToTopic(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Topic topic) {
+    public ResponseEntity<?> subscribeToTopic(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Topic topic
+    ) {
         return ResponseEntity.ok(topicService.subscribeToTopic(userDetails, topic));
     }
 
     @PutMapping({"/unsubscribe/{topic}"})
-    public ResponseEntity<?> unsubscribeToTopic(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Topic topic) {
+    public ResponseEntity<?> unsubscribeToTopic(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Topic topic
+    ) {
         return ResponseEntity.ok(topicService.unsubscribeToTopic(userDetails, topic));
     }
 }

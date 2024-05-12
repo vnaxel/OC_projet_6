@@ -1,11 +1,14 @@
 # Read Me First
+
 The following was discovered as part of building this project:
 
-* The original package name 'fr.learn.spring-security-6-auth-server' is invalid and this project uses 'fr.learn.springsecurity6authserver' instead.
+* The original package name 'fr.learn.spring-security-6-auth-server' is invalid and this project uses '
+  fr.learn.springsecurity6authserver' instead.
 
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -16,6 +19,7 @@ For further reference, please consider the following sections:
 * [Spring Security](https://docs.spring.io/spring-boot/docs/3.2.0-SNAPSHOT/reference/htmlsingle/index.html#web.security)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
@@ -25,6 +29,7 @@ The following guides illustrate how to use some features concretely:
 * [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
 
 ### Docker Compose support
+
 This project contains a Docker Compose file named `compose.yaml`.
 In this file, the following services have been defined:
 

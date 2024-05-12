@@ -28,7 +28,7 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
-    public User save (User newUser) {
+    public User save(User newUser) {
         if (newUser.getId() == null) {
             newUser.setCreatedAt(LocalDateTime.now());
         }
@@ -67,7 +67,7 @@ public class UserService {
                 .build();
     }
 
-    public UserDto changePassword (UserDetails userDetails, ChangePasswordRequest request) {
+    public UserDto changePassword(UserDetails userDetails, ChangePasswordRequest request) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {

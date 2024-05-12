@@ -5,8 +5,6 @@ import fr.openclassrooms.MDD.models.Topic;
 import fr.openclassrooms.MDD.models.User;
 import fr.openclassrooms.MDD.repositories.PublicationRepository;
 import fr.openclassrooms.MDD.repositories.UserRepository;
-import fr.openclassrooms.MDD.services.PublicationService;
-import fr.openclassrooms.MDD.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
