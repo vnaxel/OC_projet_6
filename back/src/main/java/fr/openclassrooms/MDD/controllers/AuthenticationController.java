@@ -21,7 +21,10 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid SignUpRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> signup(
+            @RequestBody @Valid SignUpRequest request,
+            HttpServletResponse response
+    ) {
         Cookie cookie = authenticationService.signup(request);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -29,7 +32,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody SignInRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> signin(
+            @RequestBody SignInRequest request,
+            HttpServletResponse response
+    ) {
         Cookie cookie = authenticationService.signin(request);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -37,7 +43,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<?> signout(HttpServletResponse response) {
+    public ResponseEntity<?> signout(
+            HttpServletResponse response
+    ) {
         Cookie cookie = authenticationService.signout();
         cookie.setPath("/");
         response.addCookie(cookie);

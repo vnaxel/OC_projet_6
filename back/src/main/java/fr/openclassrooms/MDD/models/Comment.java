@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 @Table(name = "comments")
 public class Comment {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
-        String content;
+    String content;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        @ManyToOne
-        Publication publication;
+    @ManyToOne
+    Publication publication;
 
-        @ManyToOne
-        User user;
+    @ManyToOne
+    User user;
 }
