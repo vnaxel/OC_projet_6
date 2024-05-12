@@ -14,11 +14,8 @@ import java.lang.annotation.Target;
 public @interface FieldsValueMatch {
 
     String message() default "Fields values don't match!";
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
-
     String field();
 
     String fieldMatch();

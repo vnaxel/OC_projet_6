@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,18 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, List<String>>> handleInvalidTopic(IllegalArgumentException ex) {
+        String errorMessage;
+        if (ex.getMessage().startsWith("No enum constant fr.openclassrooms.MDD.models.Topic")) {
+            errorMessage = "Invalid topic value provided.";
+        } else {
+            errorMessage = ex.getMessage();
+        }
+        List<String> errors = List.of(errorMessage);
+        return new ResponseEntity<>(getErrorsMap(errors), HttpStatus.BAD_REQUEST);
     }
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {

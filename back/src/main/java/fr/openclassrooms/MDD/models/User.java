@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -36,7 +37,7 @@ public class User implements UserDetails {
     LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    List<Topic> interestedTopics;
+    Set<Topic> interestedTopics;
 
     @OneToMany
     List<Publication> publications;
