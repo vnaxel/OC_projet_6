@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -28,6 +29,8 @@ public class DataLoader implements CommandLineRunner {
                     .email("test@test.com")
                     .password(passwordEncoder.encode("tester"))
                     .interestedTopics(List.of(Topic.SPRING, Topic.JAVA, Topic.JAVASCRIPT))
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(null)
                     .build();
             userService.save(testUser);
             log.debug("created TEST user - {}", testUser);

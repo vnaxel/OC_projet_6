@@ -1,11 +1,11 @@
 package fr.openclassrooms.MDD.controllers;
 
-import fr.openclassrooms.MDD.dto.JwtAuthenticationResponse;
 import fr.openclassrooms.MDD.dto.SignInRequest;
 import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.services.AuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +21,24 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public JwtAuthenticationResponse signup(@RequestBody SignUpRequest request) {
-        return authenticationService.signup(request);
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest request, HttpServletResponse response) {
+        Cookie cookie = authenticationService.signup(request);
+        response.addCookie(cookie);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/signin")
-    public JwtAuthenticationResponse signin(@RequestBody SignInRequest request) {
-        return authenticationService.signin(request);
+    public ResponseEntity<Void> signin(@RequestBody SignInRequest request, HttpServletResponse response) {
+        Cookie cookie = authenticationService.signin(request);
+        response.addCookie(cookie);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<Void> signout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.noContent().build();
     }
 }

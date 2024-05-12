@@ -45,6 +45,8 @@ public class UserService {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .interestedTopics(user.getInterestedTopics())
+                .created_at(user.getCreatedAt())
+                .updated_at(user.getUpdatedAt())
                 .build();
     }
 
