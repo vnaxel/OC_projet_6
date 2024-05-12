@@ -4,7 +4,10 @@ import fr.openclassrooms.MDD.dto.JwtAuthenticationResponse;
 import fr.openclassrooms.MDD.dto.SignInRequest;
 import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.services.AuthenticationService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +22,7 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public JwtAuthenticationResponse signup(@RequestBody SignUpRequest request) {
-        return  authenticationService.signup(request);
+        return authenticationService.signup(request);
     }
 
     @PostMapping("/signin")

@@ -70,6 +70,16 @@ public class JwtService {
                 .getBody();
     }
 
+    private String CreateEmptyTokenForLogout() {
+        return Jwts
+                .builder()
+                .setSubject("")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);

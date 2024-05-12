@@ -23,6 +23,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(unique = true)
     String username;
 
     @Column(unique = true)
@@ -35,12 +36,6 @@ public class User implements UserDetails {
     LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    Role role;
-
-    @OneToMany
-    List<Comment> comments;
-
-    @Enumerated(EnumType.STRING)
     List<Topic> interestedTopics;
 
     @OneToMany
@@ -48,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

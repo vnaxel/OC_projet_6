@@ -1,6 +1,6 @@
 package fr.openclassrooms.MDD.utils;
 
-import fr.openclassrooms.MDD.models.Role;
+import fr.openclassrooms.MDD.models.Topic;
 import fr.openclassrooms.MDD.models.User;
 import fr.openclassrooms.MDD.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,15 +22,15 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userService.count() == 0) {
-            User admin = User
+            User testUser = User
                     .builder()
-                    .username("admin")
-                    .email("admin@admin.com")
-                    .password(passwordEncoder.encode("admin"))
-                    .role(Role.ROLE_ADMIN)
+                    .username("test")
+                    .email("test@test.com")
+                    .password(passwordEncoder.encode("tester"))
+                    .interestedTopics(List.of(Topic.SPRING, Topic.JAVA, Topic.JAVASCRIPT))
                     .build();
-            userService.save(admin);
-            log.debug("created ADMIN user - {}", admin);
+            userService.save(testUser);
+            log.debug("created TEST user - {}", testUser);
         }
 
     }
