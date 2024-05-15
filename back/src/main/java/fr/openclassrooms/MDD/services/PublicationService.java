@@ -31,11 +31,12 @@ public class PublicationService {
                 .topic(Topic.valueOf(publicationRequest.getTopic()))
                 .user(user)
                 .createdAt(LocalDateTime.now())
-                .updatedAt(null)
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         publication = publicationRepository.save(publication);
         return PublicationDto.builder()
+                .id(publication.getId())
                 .title(publication.getTitle())
                 .content(publication.getContent())
                 .author(publication.getUser().toDto())

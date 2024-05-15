@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,13 @@ public class TopicService {
     public UserDto subscribeToTopic(UserDetails userDetails, Topic topic) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.getInterestedTopics().add(topic);
+        Set<Topic> interestedTopics = user.getInterestedTopics();
+        if (interestedTopics != null) {
+            interestedTopics.add(topic);
+        } else {
+            interestedTopics = Set.of(topic);
+        }
+        user.setInterestedTopics(interestedTopics);
         user = userRepository.save(user);
 
         return UserDto.builder()

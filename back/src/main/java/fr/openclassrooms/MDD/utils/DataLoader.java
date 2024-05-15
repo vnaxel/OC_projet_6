@@ -1,14 +1,10 @@
 package fr.openclassrooms.MDD.utils;
 
-import fr.openclassrooms.MDD.dto.CommentRequest;
-import fr.openclassrooms.MDD.models.Comment;
 import fr.openclassrooms.MDD.models.Publication;
 import fr.openclassrooms.MDD.models.Topic;
 import fr.openclassrooms.MDD.models.User;
-import fr.openclassrooms.MDD.repositories.CommentRepository;
 import fr.openclassrooms.MDD.repositories.PublicationRepository;
 import fr.openclassrooms.MDD.repositories.UserRepository;
-import fr.openclassrooms.MDD.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -37,7 +33,7 @@ public class DataLoader implements CommandLineRunner {
                     .password(passwordEncoder.encode("tester"))
                     .interestedTopics(Set.of(Topic.SPRING, Topic.JAVA, Topic.JAVASCRIPT))
                     .createdAt(LocalDateTime.now())
-                    .updatedAt(null)
+                    .updatedAt(LocalDateTime.now())
                     .build();
             userRepository.save(testUser);
             log.debug("created TEST user - {}", testUser);
@@ -48,7 +44,7 @@ public class DataLoader implements CommandLineRunner {
                     .user(testUser)
                     .topic(Topic.SPRING)
                     .createdAt(LocalDateTime.now().minusDays(3))
-                    .updatedAt(null)
+                    .updatedAt(LocalDateTime.now())
                     .build();
             publicationRepository.save(testSpringPublication);
             Publication testJavaPublication = Publication
@@ -58,7 +54,7 @@ public class DataLoader implements CommandLineRunner {
                     .user(testUser)
                     .topic(Topic.JAVA)
                     .createdAt(LocalDateTime.now().minusDays(1))
-                    .updatedAt(null)
+                    .updatedAt(LocalDateTime.now())
                     .build();
             publicationRepository.save(testJavaPublication);
             Publication testAwsPublication = Publication
@@ -68,7 +64,7 @@ public class DataLoader implements CommandLineRunner {
                     .user(testUser)
                     .topic(Topic.AWS)
                     .createdAt(LocalDateTime.now().minusDays(2))
-                    .updatedAt(null)
+                    .updatedAt(LocalDateTime.now())
                     .build();
             publicationRepository.save(testAwsPublication);
         }
