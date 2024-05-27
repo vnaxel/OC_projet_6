@@ -37,8 +37,7 @@ public class UserController {
             HttpServletResponse response
     ) {
         UserDto userDto = userService.updateUser(userDetails, request);
-        String jwt = authenticationService.updateUserAuth(request);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(authenticationService.updateUserAuth(request));
     }
 
     @PutMapping("/me/password")

@@ -25,15 +25,13 @@ public class AuthenticationController {
     public ResponseEntity<JwtAuthenticationResponse> signup(
             @RequestBody @Valid SignUpRequest request
     ) {
-        String token = authenticationService.signup(request);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok(authenticationService.signup(request));
     }
 
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(
             @RequestBody SignInRequest request
     ) {
-        String token = authenticationService.signin(request);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok(authenticationService.signin(request));
     }
 }

@@ -1,5 +1,6 @@
 package fr.openclassrooms.MDD.services;
 
+import fr.openclassrooms.MDD.dto.JwtAuthenticationResponse;
 import fr.openclassrooms.MDD.dto.SignInRequest;
 import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.dto.UpdateUserRequest;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
-    public String signup(SignUpRequest request) {
+    public JwtAuthenticationResponse signup(SignUpRequest request) {
         var user = User
                 .builder()
                 .username(request.getUsername())
@@ -32,19 +34,25 @@ public class AuthenticationService {
                 .build();
 
         user = userService.save(user);
-        return jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
+        return new JwtAuthenticationResponse(token, user.getUsername(), user.getEmail());
     }
 
-    public String signin(SignInRequest request) {
+    public JwtAuthenticationResponse signin(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmailOrUsername(), request.getPassword()));
-        var user = userService.userDetailsService().loadUserByUsername(request.getEmailOrUsername());
-        return jwtService.generateToken(user);
+        UserDetails userDetails = userService.userDetailsService().loadUserByUsername(request.getEmailOrUsername());
+        User user = userRepository.findByEmailOrUsername(request.getEmailOrUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String token = jwtService.generateToken(userDetails);
+
+        return new JwtAuthenticationResponse(token, user.getUsername(), user.getEmail());
     }
 
-    public String updateUserAuth(UpdateUserRequest request) {
+    public JwtAuthenticationResponse updateUserAuth(UpdateUserRequest request) {
         var user = userRepository.findByEmailOrUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return jwtService.generateToken(user);
+        String token =  jwtService.generateToken(user);
+        return new JwtAuthenticationResponse(token, user.getUsername(), user.getEmail());
     }
 }
