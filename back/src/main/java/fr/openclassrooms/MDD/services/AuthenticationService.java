@@ -23,7 +23,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
-    public Cookie signup(SignUpRequest request) {
+    public String signup(SignUpRequest request) {
         var user = User
                 .builder()
                 .username(request.getUsername())
@@ -32,28 +32,19 @@ public class AuthenticationService {
                 .build();
 
         user = userService.save(user);
-        var jwt = jwtService.generateToken(user);
-        return new Cookie("token", jwt);
+        return jwtService.generateToken(user);
     }
 
-    public Cookie signin(SignInRequest request) {
+    public String signin(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmailOrUsername(), request.getPassword()));
         var user = userService.userDetailsService().loadUserByUsername(request.getEmailOrUsername());
-        var jwt = jwtService.generateToken(user);
-        return new Cookie("token", jwt);
+        return jwtService.generateToken(user);
     }
 
-    public Cookie updateUserCookie(UpdateUserRequest request) {
+    public String updateUserAuth(UpdateUserRequest request) {
         var user = userRepository.findByEmailOrUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        var jwt = jwtService.generateToken(user);
-        return new Cookie("token", jwt);
-    }
-
-    public Cookie signout() {
-        Cookie cookie = new Cookie("token", "");
-        cookie.setMaxAge(0);
-        return cookie;
+        return jwtService.generateToken(user);
     }
 }

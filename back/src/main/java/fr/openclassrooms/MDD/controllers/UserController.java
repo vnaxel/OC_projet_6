@@ -1,6 +1,7 @@
 package fr.openclassrooms.MDD.controllers;
 
 import fr.openclassrooms.MDD.dto.ChangePasswordRequest;
+import fr.openclassrooms.MDD.dto.JwtAuthenticationResponse;
 import fr.openclassrooms.MDD.dto.UpdateUserRequest;
 import fr.openclassrooms.MDD.dto.UserDto;
 import fr.openclassrooms.MDD.services.AuthenticationService;
@@ -30,16 +31,14 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<?> updateMe(
+    public ResponseEntity<JwtAuthenticationResponse> updateMe(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UpdateUserRequest request,
             HttpServletResponse response
     ) {
         UserDto userDto = userService.updateUser(userDetails, request);
-        Cookie updatedUsercookie = authenticationService.updateUserCookie(request);
-        updatedUsercookie.setPath("/");
-        response.addCookie(updatedUsercookie);
-        return ResponseEntity.ok(userDto);
+        String jwt = authenticationService.updateUserAuth(request);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PutMapping("/me/password")

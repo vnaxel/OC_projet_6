@@ -1,5 +1,6 @@
 package fr.openclassrooms.MDD.controllers;
 
+import fr.openclassrooms.MDD.dto.JwtAuthenticationResponse;
 import fr.openclassrooms.MDD.dto.SignInRequest;
 import fr.openclassrooms.MDD.dto.SignUpRequest;
 import fr.openclassrooms.MDD.services.AuthenticationService;
@@ -21,34 +22,18 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(
-            @RequestBody @Valid SignUpRequest request,
-            HttpServletResponse response
+    public ResponseEntity<JwtAuthenticationResponse> signup(
+            @RequestBody @Valid SignUpRequest request
     ) {
-        Cookie cookie = authenticationService.signup(request);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return ResponseEntity.ok().build();
+        String token = authenticationService.signup(request);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(
-            @RequestBody SignInRequest request,
-            HttpServletResponse response
+    public ResponseEntity<JwtAuthenticationResponse> signin(
+            @RequestBody SignInRequest request
     ) {
-        Cookie cookie = authenticationService.signin(request);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/signout")
-    public ResponseEntity<?> signout(
-            HttpServletResponse response
-    ) {
-        Cookie cookie = authenticationService.signout();
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return ResponseEntity.noContent().build();
+        String token = authenticationService.signin(request);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 }
