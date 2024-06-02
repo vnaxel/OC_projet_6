@@ -22,7 +22,7 @@ export class LoginComponent {
             '',
             [
                 Validators.required,
-                Validators.email
+                Validators.min(3)
             ]
         ],
         password: [
@@ -45,9 +45,9 @@ export class LoginComponent {
                 localStorage.setItem('token', response.token);
                 this.authService.me().subscribe((user: User) => {
                     this.sessionService.logIn(user);
-                    this.router.navigate(['/publications'])
+                    this.router.navigate(['/themes'])
                 });
-                this.router.navigate(['/publications'])
+                this.router.navigate(['/themes'])
             },
             error => this.onError = true
         );

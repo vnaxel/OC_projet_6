@@ -37,6 +37,7 @@ public class User implements UserDetails {
 
     LocalDateTime updatedAt;
 
+    @Column(length = 1000)
     @Enumerated(EnumType.STRING)
     Set<Topic> interestedTopics;
 

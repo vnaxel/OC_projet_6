@@ -1,0 +1,13 @@
+<div>
+
+    <h1>Topics</h1>
+    
+    <ul>
+        <li *ngFor="let topic of (topics$ | async)">
+        {{ topic }} <span *ngIf="subscribedTopics$.includes(topic)"> - Subscribed</span>
+        <button *ngIf="!subscribedTopics$.includes(topic)" (click)="subscribeToTopic(topic)">Subscribe</button>
+        <button *ngIf="subscribedTopics$.includes(topic)" (click)="unsubscribeToTopic(topic)">Unsubscribe</button>
+        </li>
+    </ul>
+    
+</div>

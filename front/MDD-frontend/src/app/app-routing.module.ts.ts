@@ -6,11 +6,11 @@ import { AuthGuard } from './guards/auth.guard';
 import { UnauthGuard } from './guards/unauth.guard';
 
 const routes: Routes = [
-    // {
-    //     path: 'rentals',
-    //     canActivate: [AuthGuard],
-    //     loadChildren: () => import('./features/rentals/rentals.module').then(m => m.RentalsModule)
-    // },
+    {
+        path: 'themes',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./features/topics/topic.module').then(m => m.RentalsModule)
+    },
     {
         path: '',
         canActivate: [UnauthGuard],
