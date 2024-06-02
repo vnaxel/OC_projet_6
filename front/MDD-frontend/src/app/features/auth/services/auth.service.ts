@@ -3,38 +3,27 @@ import { UserInterface } from '../interfaces/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { RegisterRequest } from '../interfaces/registerRequest.interface';
 import { LoginRequest } from '../interfaces/loginRequest.interface';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '../../../interfaces/user.interface';
 
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    http = inject(HttpClient);
-    router = inject(Router);
-    currentUserSig = signal<UserInterface | undefined | null>(undefined);
+    private pathService = 'http://localhost:8081/api/v1';
 
-    login(loginRequest: LoginRequest) {
-        return this.http.post<{ token: string, username: string, email: string }>(
-            'http://localhost:8081/api/v1/signin',
-            loginRequest
-        ).subscribe((response) => {
-            console.log('response', response);
-            localStorage.setItem('token', response.token);
-            this.currentUserSig.set({ email: response.email, token: response.token, username: response.username });
-            this.router.navigateByUrl('/');
-        });
+    constructor(private httpClient: HttpClient) { }
+
+    public register(registerRequest: RegisterRequest): Observable<UserInterface> {
+        return this.httpClient.post<UserInterface>(`${this.pathService}/signup`, registerRequest);
     }
 
-    register(registerRequest: RegisterRequest) {
-        return this.http.post<{ token: string, username: string, email: string }>(
-            'http://localhost:8081/api/v1/signup',
-            registerRequest
-        ).subscribe((response) => {
-            console.log('response', response);
-            localStorage.setItem('token', response.token);
-            this.currentUserSig.set({ email: response.email, token: response.token, username: response.username });
-            this.router.navigateByUrl('/');
-        });
+    public login(loginRequest: LoginRequest): Observable<UserInterface> {
+        return this.httpClient.post<UserInterface>(`${this.pathService}/signin`, loginRequest);
+    }
+
+    public me(): Observable<User> {
+        return this.httpClient.get<User>(`${this.pathService}/user/me`);
     }
 }

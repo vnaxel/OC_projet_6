@@ -1,37 +1,43 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { UserInfos } from './interfaces/userInfos.interface';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from './features/auth/services/auth.service';
+import { User } from './interfaces/user.interface';
+import { SessionService } from './services/session.service';
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    imports: [CommonModule, RouterOutlet, RouterLink],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    authService = inject(AuthService);
-    http = inject(HttpClient);
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionService: SessionService) {
+  }
 
-    ngOnInit(): void {
-        const token = localStorage.getItem('token');
-        if (token) {
-            this.http.get<UserInfos>('http://localhost:8081/api/v1/user/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).subscribe((response) => {
-                this.authService.currentUserSig.set({token, email: response.email, username: response.username});
-            });
-        }
-    }
+  public ngOnInit(): void {
+    this.autoLog();
+  }
 
-    logout(): void {
-        console.log('logout');
-        localStorage.setItem('token', '');
-        this.authService.currentUserSig.set(null);
-    }
+  public $isLogged(): Observable<boolean> {
+    return this.sessionService.$isLogged();
+  }
+
+  public logout(): void {
+    this.sessionService.logOut();
+    this.router.navigate([''])
+  }
+
+  public autoLog(): void {
+    this.authService.me().subscribe(
+      (user: User) => {
+        this.sessionService.logIn(user);
+      },
+      (_) => {
+        this.sessionService.logOut();
+      }
+    )
+  }
 }

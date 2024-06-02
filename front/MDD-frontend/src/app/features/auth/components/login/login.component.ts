@@ -4,38 +4,53 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { LoginRequest } from '../../interfaces/loginRequest.interface';
+import { CommonModule } from '@angular/common';
+import { UserInterface } from '../../interfaces/user.interface';
+import { User } from '../../../../interfaces/user.interface';
+import { SessionService } from '../../../../services/session.service';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    standalone: true,
-    imports: [ReactiveFormsModule],
 })
 export class LoginComponent {
-    fb = inject(FormBuilder);
-    http = inject(HttpClient);
-    authService = inject(AuthService);
-    router = inject(Router);
+    public hide = true;
+    public onError = false;
 
     public form = this.fb.group({
-    emailOrUsername: [
-      '',
-      [
-        Validators.required,
-        Validators.email
-      ]
-    ],
-    password: [
-      '',
-      [
-        Validators.required,
-        Validators.min(3)
-      ]
-    ]
-  });
+        emailOrUsername: [
+            '',
+            [
+                Validators.required,
+                Validators.email
+            ]
+        ],
+        password: [
+            '',
+            [
+                Validators.required,
+                Validators.min(3)
+            ]
+        ]
+    });
+    constructor(private authService: AuthService,
+        private fb: FormBuilder,
+        private router: Router,
+        private sessionService: SessionService) { }
 
-    onSubmit(): void {
+    public submit(): void {
         const loginRequest = this.form.value as LoginRequest;
-        this.authService.login(loginRequest);
+        this.authService.login(loginRequest).subscribe(
+            (response: UserInterface) => {
+                localStorage.setItem('token', response.token);
+                this.authService.me().subscribe((user: User) => {
+                    this.sessionService.logIn(user);
+                    this.router.navigate(['/publications'])
+                });
+                this.router.navigate(['/publications'])
+            },
+            error => this.onError = true
+        );
     }
 }
+

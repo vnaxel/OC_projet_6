@@ -8,7 +8,7 @@
 }
 */
 
-export interface UserInfos {
+export interface User {
     email: string;
     username: string;
     interestedTopics: string[];
