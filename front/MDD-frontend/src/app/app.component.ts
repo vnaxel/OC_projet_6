@@ -19,6 +19,11 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.autoLog();
+    if (this.sessionService.isLogged) {
+      this.router.navigate(['/publications']);
+      return;
+    }
+    this.router.navigate(['/login']);
   }
 
   public $isLogged(): Observable<boolean> {
@@ -27,13 +32,14 @@ export class AppComponent implements OnInit {
 
   public logout(): void {
     this.sessionService.logOut();
-    this.router.navigate([''])
+    this.router.navigate(['/login'])
   }
 
   public autoLog(): void {
     this.authService.me().subscribe(
       (user: User) => {
         this.sessionService.logIn(user);
+        this.router.navigate(['/publications']);
       },
       (_) => {
         this.sessionService.logOut();

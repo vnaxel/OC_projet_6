@@ -6,20 +6,38 @@
                 <button mat-icon-button (click)="back()">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
-                <h1>User information</h1>
+                <h1 *ngIf="!this.changingPassword">User information</h1>
+                <h1 *ngIf="this.changingPassword">Change password</h1>
+                <button mat-raised-button color="primary" (click)="switchMode()" *ngIf="this.changingPassword">User Info</button>
+                <button mat-raised-button color="primary" (click)="switchMode()" *ngIf="!this.changingPassword">Changer de mot de passe</button>
             </div>
-            
+
         </mat-card-title>
         <mat-card-content>
-            <div *ngIf="user" fxLayout="column" fxLayoutAlign="start center">
-                <p>Name: {{ user.username }}</p>
-                <p>Email: {{ user.email }}</p>
-                <p>Abonnements:</p>
-                <ul>
-                    <li *ngFor="let topic of user.interestedTopics">{{ topic }}</li>
-                </ul>
-                <p><i>Create at: </i> {{ user.created_at| date: 'longDate'}}</p>
-                <p><i>Last update: </i> {{ user.updated_at| date: 'longDate'}}</p>
+            <div *ngIf="!this.changingPassword && userForm">
+                <form *ngIf="!this.changingPassword" [formGroup]="userForm" (ngSubmit)="submitChangeEmailOrUsername()">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Username" formControlName="username">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Email" formControlName="email">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" [disabled]="userForm.invalid">Submit</button>
+                </form>
+            </div>
+            <div *ngIf="this.changingPassword && passwordForm">
+                <form *ngIf="this.changingPassword" [formGroup]="passwordForm" (ngSubmit)="submitChangePassword()">
+                    <mat-form-field fxFlex appearance="outline">
+                        <input matInput placeholder="Old password" formControlName="oldPassword">
+                    </mat-form-field>
+                    <mat-form-field fxFlex appearance="outline">
+                        <input matInput placeholder="New password" formControlName="newPassword">
+                    </mat-form-field>
+                    <mat-form-field fxFlex appearance="outline">
+                        <input matInput placeholder="Confirm new password" formControlName="confirmPassword">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" [disabled]="passwordForm.invalid">Submit</button>
+                </form>
             </div>
         </mat-card-content>
     </mat-card>

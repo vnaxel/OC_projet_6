@@ -12,8 +12,8 @@
                     <input matInput placeholder="Content" formControlName="content">
                 </mat-form-field>
                 <mat-form-field fxFlex>
-                    <mat-select ngDefaultControl formControlName="topic">
-                        <mat-option *ngFor="let theme of topics$ | async" [value]="theme">{{ theme }}</mat-option>
+                    <mat-select *ngIf="user" ngDefaultControl formControlName="topic">
+                        <mat-option *ngFor="let theme of user?.interestedTopics" [value]="theme">{{ theme }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-card-content>

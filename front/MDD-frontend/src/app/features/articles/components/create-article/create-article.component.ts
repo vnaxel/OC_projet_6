@@ -5,6 +5,8 @@ import { TopicService } from '../../../topics/services/topic.service';
 import { Router } from '@angular/router';
 import { Article } from '../../intefaces/article.interface';
 import { CreateArticleRequest } from '../../intefaces/createArticleRequest';
+import { AuthService } from '../../../auth/services/auth.service';
+import { User } from '../../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-create-article',
@@ -12,7 +14,7 @@ import { CreateArticleRequest } from '../../intefaces/createArticleRequest';
   styleUrl: './create-article.component.scss'
 })
 export class CreateArticleComponent {
-    public topics$ = this.topicService.getTopics();
+    public user: User | undefined;
     public articleForm = this.fb.group({
         topic: [
             '',
@@ -28,9 +30,17 @@ export class CreateArticleComponent {
             ],
     });
 
+    public ngOnInit(): void {
+        this.authService.me().subscribe(
+            (user: User) => {
+                this.user = user
+            }
+        )
+    }
+
     constructor(
         private fb: FormBuilder,
-        private topicService: TopicService,
+        private authService: AuthService,
         private articleService: ArticleService,
         private router: Router,
     ) { }

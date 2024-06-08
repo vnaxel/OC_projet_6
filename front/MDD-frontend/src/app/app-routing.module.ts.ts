@@ -4,6 +4,7 @@ import { MeComponent } from './components/me/me.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UnauthGuard } from './guards/unauth.guard';
+import { LoginComponent } from './features/auth/components/login/login.component';
 
 const routes: Routes = [
     {
@@ -19,7 +20,7 @@ const routes: Routes = [
     {
         path: '',
         canActivate: [UnauthGuard],
-        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
     },
     {
         path: 'me',
@@ -27,7 +28,7 @@ const routes: Routes = [
         component: MeComponent
     },
     { path: '404', component: NotFoundComponent },
-    { path: '**', redirectTo: '404' }
+    { path: '**', redirectTo: '404' },
 ];
 
 @NgModule({
