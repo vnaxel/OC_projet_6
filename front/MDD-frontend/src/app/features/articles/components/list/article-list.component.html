@@ -1,0 +1,24 @@
+<div class="list">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Articles</mat-card-title>
+        </mat-card-header>
+        <button mat-fab color="primary" class="add" routerLink="create">
+            <mat-icon>add</mat-icon>
+        </button>
+        <mat-card-content>
+            <ul>
+                <li *ngFor="let article of (articles$ | async)">
+                    <h3 matLine>{{ article.title }}</h3>
+                    <p matLine>{{ article.topic }}</p>
+                    <p matLine>{{ article.author.username }}</p>
+                    <p matLine>{{ article.author.email }}</p>
+                    <p matLine>{{ article.created_at | date }}</p>
+                    <p matLine>{{ article.updated_at | date }}</p>
+                    <button mat-raised-button color="primary" [routerLink]="['article', article.id]">Read</button>
+                </li>
+            </ul>
+        </mat-card-content>
+    </mat-card>
+
+</div>

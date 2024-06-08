@@ -1,8 +1,9 @@
 <div class="app">
     <mat-toolbar color="primary" class="nav">
-      <span>Rental app</span>
+      <span>MondeDeDev</span>
       <div *ngIf="$isLogged() | async; else notLogged" class="nav__group">
         <span routerLink="themes" class="link">Themes</span>
+        <span routerLink="publications" class="link">Posts</span>
         <span routerLink="me" class="link">Account</span>
         <span (click)="logout()" class="link">Logout</span>
       </div>

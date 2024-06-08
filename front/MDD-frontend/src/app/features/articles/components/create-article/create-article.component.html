@@ -1,0 +1,23 @@
+<div class="create">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Create Article</mat-card-title>
+        </mat-card-header>
+        <form class="create-form" [formGroup]="articleForm" (ngSubmit)="submit()">
+            <mat-card-content fxLayout="column">
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="Title" formControlName="title">
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="Content" formControlName="content">
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-select ngDefaultControl formControlName="topic">
+                        <mat-option *ngFor="let theme of topics$ | async" [value]="theme">{{ theme }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-card-content>
+            <button mat-raised-button color="primary" [disabled]="articleForm.invalid" type="submit">Submit</button>
+        </form>
+    </mat-card>
+</div>

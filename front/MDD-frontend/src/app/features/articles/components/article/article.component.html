@@ -1,0 +1,28 @@
+<div class="article">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ article?.title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{ article?.content }}</p>
+            <p>{{ article?.topic }}</p>
+            <p>{{ article?.author?.username }}</p>
+            <p>{{ article?.author?.email }}</p>
+            <p>{{ article?.created_at | date }}</p>
+            <p>{{ article?.updated_at | date }}</p>
+            <p>comments</p>
+            <ul>
+                <li *ngFor="let comment of article?.comments">
+                    <p>{{ comment.content }}</p>
+                    <p>{{ comment.author.username }}</p>
+                </li>
+            </ul>
+        </mat-card-content>
+        <form class="createComment" [formGroup]="commentForm" (ngSubmit)="submitComment()">
+            <mat-form-field>
+                <input matInput placeholder="Comment" formControlName="content">
+            </mat-form-field>
+            <button mat-raised-button color="primary" [disabled]="commentForm.invalid">Submit</button>
+        </form>
+    </mat-card>
+</div>
