@@ -32,7 +32,7 @@
                 <input class="formField__input" type="password" placeholder="Mot de passe" formControlName="password">
             </div>
         </div>
-        <button class="button__purple" type="submit" [disabled]="form.invalid">S'inscrire</button>
+        <button class="button__purple" type="submit" [disabled]="form.invalid">Se connecter</button>
         <div class="error" *ngIf="this.form.hasError">
             <span class="formError"
                 *ngIf="this.form.controls.emailOrUsername.errors?.['required'] && this.form.controls.emailOrUsername.touched">⚠️ - L'email ou
