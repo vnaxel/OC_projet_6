@@ -45,9 +45,12 @@ export class LoginComponent {
                 localStorage.setItem('token', response.token);
                 this.authService.me().subscribe((user: User) => {
                     this.sessionService.logIn(user);
+                    if (!this.sessionService.user?.interestedTopics) {
+                        this.router.navigate(['/themes'])
+                        return
+                    }
                     this.router.navigate(['/publications'])
                 });
-                this.router.navigate(['/publications'])
             },
             error => this.onError = true
         );

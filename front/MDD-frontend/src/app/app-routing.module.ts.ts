@@ -4,7 +4,6 @@ import { MeComponent } from './components/me/me.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UnauthGuard } from './guards/unauth.guard';
-import { LoginComponent } from './features/auth/components/login/login.component';
 
 const routes: Routes = [
     {

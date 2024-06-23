@@ -8,37 +8,41 @@ import { UserInterface } from '../../interfaces/user.interface';
 import { User } from '../../../../interfaces/user.interface';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
 
-  public onError = false;
+    public onError = false;
 
-  public form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required, Validators.min(3)]],
-    password: ['', [Validators.required, Validators.min(3)]]
-  });
+    public form = this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        username: ['', [Validators.required, Validators.min(3)]],
+        password: ['', [Validators.required, Validators.min(3)]]
+    });
 
-  constructor(private authService: AuthService,
-    private fb: FormBuilder,
-    private router: Router,
-    private sessionService: SessionService) { }
+    constructor(private authService: AuthService,
+        private fb: FormBuilder,
+        private router: Router,
+        private sessionService: SessionService) { }
 
-  public submit(): void {
-    const registerRequest = this.form.value as RegisterRequest;
-    this.authService.register(registerRequest).subscribe(
-      (response: UserInterface) => {
-        localStorage.setItem('token', response.token);
-        this.authService.me().subscribe((user: User) => {
-          this.sessionService.logIn(user);
-          this.router.navigate(['/rentals'])
-        });
-      },
-      error => this.onError = true
-    );
-  }
+    public submit(): void {
+        const registerRequest = this.form.value as RegisterRequest;
+        this.authService.register(registerRequest).subscribe(
+            (response: UserInterface) => {
+                localStorage.setItem('token', response.token);
+                this.authService.me().subscribe((user: User) => {
+                    this.sessionService.logIn(user);
+                    if (!this.sessionService.user?.interestedTopics) {
+                        this.router.navigate(['/themes'])
+                        return
+                    }
+                    this.router.navigate(['/publications'])
+                });
+            },
+            error => this.onError = true
+        );
+    }
 
 }

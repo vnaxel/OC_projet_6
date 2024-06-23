@@ -1,12 +1,24 @@
+$color-primary: #6600cc;
+
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    color: #fff;
+    color: #ffffff;
+    border-bottom: 1px solid black;
     &__group{
         display: flex;
         align-items: center;
         gap: 1rem;
+        color: black;
+    }
+}
+
+.link {
+    color: black;
+    text-decoration: none;
+    &:hover {
+        color: $color-primary;
     }
 }
