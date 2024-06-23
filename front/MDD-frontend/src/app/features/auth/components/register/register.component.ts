@@ -6,7 +6,6 @@ import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { SessionService } from '../../../../services/session.service';
 import { UserInterface } from '../../interfaces/user.interface';
 import { User } from '../../../../interfaces/user.interface';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Errors } from '../../interfaces/errors.interface';
 
@@ -17,19 +16,30 @@ import { Errors } from '../../interfaces/errors.interface';
 })
 export class RegisterComponent {
 
-    public onError = false;
+    public errors: string | undefined;
 
     public form = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-        username: ['', [Validators.required, Validators.min(3)]],
-        password: ['', [Validators.required, Validators.min(3)]]
+        email: ['', [
+            Validators.required,
+            Validators.email
+        ]],
+        username: ['', [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(20),
+        ]],
+        password: ['', [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.maxLength(20),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/)
+        ]],
     });
 
     constructor(private authService: AuthService,
         private fb: FormBuilder,
         private router: Router,
         private sessionService: SessionService,
-        private matSnackBar: MatSnackBar,
     ) { }
 
 
@@ -47,20 +57,13 @@ export class RegisterComponent {
                     this.router.navigate(['/publications'])
                 });
             },
-            error: (err: HttpErrorResponse) => {
-                this.onError = true,
-                    this.showErrors(err.error);
-            },
+            error: (err: HttpErrorResponse) => this.showErrors(err.error)
         });
     }
 
     private showErrors(errs: Errors): void {
-        let message = Object.values(errs.errors).join(' - ');
-        this.matSnackBar.open(
-            message, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-        });
+        this.errors = errs.errors.join('\n');
+        // efface l'erreur apres 5 secondes
+        setTimeout(() => this.errors = undefined, 5000);
     }
 }

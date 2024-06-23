@@ -1,25 +1,27 @@
-$color-primary: #6600cc;
+@import '../styles.scss';
 
 .app {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    align-items: center;
 }
 
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    color: #ffffff;
     border-bottom: 1px solid black;
-
     &__group {
         display: flex;
         align-items: center;
         gap: 1rem;
         color: black;
+    }
+}
+
+@media (max-width: 520px) {
+    .nav {
+        display: none;
     }
 }
 
@@ -30,15 +32,4 @@ $color-primary: #6600cc;
     &:hover {
         color: $color-primary;
     }
-}
-
-.container {
-    display: flex;
-    height: 100%;
-    width: 80%;
-    justify-content: center;
-}
-
-.component {
-    display: flex;
 }
