@@ -1,0 +1,23 @@
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 100%;
+    margin-top: 20%;
+}
+
+.btnGroup {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    & > button {
+        padding: 0.5rem 1rem;
+        border: 1px black solid;
+        border-radius: 5px;
+        background-color: #ffffff;
+        font-weight: 700;
+        color: #000000;
+        cursor: pointer;
+    }
+}

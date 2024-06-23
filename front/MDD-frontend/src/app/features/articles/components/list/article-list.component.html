@@ -6,7 +6,7 @@
         <button mat-fab color="primary" class="add" routerLink="create">
             <mat-icon>add</mat-icon>
         </button>
-        <div *ngIf="subscribedTopics$?.length == 0">
+        <div *ngIf="!subscribedTopics$ || subscribedTopics$.length === 0">
             Souscrivez d'abord a des themes
         </div>
         <mat-card-content>

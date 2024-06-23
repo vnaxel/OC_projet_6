@@ -1,18 +1,19 @@
 <div class="me">
-    <mat-card class="">
-        <mat-card-title>
+        <div>
 
-            <div fxLayout="row" fxLayoutAlign="start center">
+            <div>
                 <button mat-icon-button (click)="back()">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <h1 *ngIf="!this.changingPassword">User information</h1>
                 <h1 *ngIf="this.changingPassword">Change password</h1>
-                <button mat-raised-button color="primary" (click)="switchMode()" *ngIf="this.changingPassword">User Info</button>
-                <button mat-raised-button color="primary" (click)="switchMode()" *ngIf="!this.changingPassword">Changer de mot de passe</button>
+                <button (click)="switchMode()" *ngIf="this.changingPassword">User
+                    Info</button>
+                <button (click)="switchMode()" *ngIf="!this.changingPassword">Changer
+                    de mot de passe</button>
             </div>
 
-        </mat-card-title>
+        </div>
         <mat-card-content>
             <div *ngIf="!this.changingPassword && userForm">
                 <form *ngIf="!this.changingPassword" [formGroup]="userForm" (ngSubmit)="submitChangeEmailOrUsername()">
@@ -22,7 +23,7 @@
                     <mat-form-field appearance="outline">
                         <input matInput placeholder="Email" formControlName="email">
                     </mat-form-field>
-                    <button mat-raised-button color="primary" [disabled]="userForm.invalid">Submit</button>
+                    <button [disabled]="userForm.invalid">Submit</button>
                 </form>
             </div>
             <div *ngIf="this.changingPassword && passwordForm">
@@ -33,12 +34,27 @@
                     <mat-form-field fxFlex appearance="outline">
                         <input matInput placeholder="New password" formControlName="newPassword">
                     </mat-form-field>
+                    <div *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.invalid">
+                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is
+                            required.</mat-error>
+                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">New password must be
+                            at least
+                            8 characters long.</mat-error>
+                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['maxlength']">New password must be
+                            no more
+                            than 20 characters long.</mat-error>
+                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']">New password must
+                            include at
+                            least one uppercase letter, one lowercase letter, one digit, and one special
+                            character.</mat-error>
+                    </div>
                     <mat-form-field fxFlex appearance="outline">
                         <input matInput placeholder="Confirm new password" formControlName="confirmPassword">
                     </mat-form-field>
-                    <button mat-raised-button color="primary" [disabled]="passwordForm.invalid">Submit</button>
+                    <button [disabled]="passwordForm.invalid">Submit</button>
                 </form>
             </div>
+            <span (click)="logout()" class="link">Se Déconnecter</span>
+
         </mat-card-content>
-    </mat-card>
 </div>

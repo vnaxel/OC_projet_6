@@ -1,5 +1,12 @@
 $color-primary: #6600cc;
 
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+}
+
 .nav {
     display: flex;
     justify-content: space-between;
@@ -7,7 +14,8 @@ $color-primary: #6600cc;
     padding: 1rem;
     color: #ffffff;
     border-bottom: 1px solid black;
-    &__group{
+
+    &__group {
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -18,7 +26,19 @@ $color-primary: #6600cc;
 .link {
     color: black;
     text-decoration: none;
+
     &:hover {
         color: $color-primary;
     }
+}
+
+.container {
+    display: flex;
+    height: 100%;
+    width: 80%;
+    justify-content: center;
+}
+
+.component {
+    display: flex;
 }

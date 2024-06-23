@@ -8,6 +8,9 @@ import { SessionService } from '../../services/session.service';
 import { ChangeEmailOrUsernameRequest } from '../../interfaces/changeEmailOrUsernameRequest.interface';
 import { UserInterface } from '../../features/auth/interfaces/user.interface';
 import { ChangePasswordRequest } from '../../interfaces/changePasswordRequest.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Errors } from '../../features/auth/interfaces/errors.interface';
 
 @Component({
     selector: 'app-me',
@@ -25,6 +28,7 @@ export class MeComponent {
         private authService: AuthService,
         private userService: UserService,
         private route: ActivatedRoute,
+        private matSnackBar: MatSnackBar,
         private fb: FormBuilder,
         private sessionService: SessionService,
         private router: Router
@@ -57,19 +61,26 @@ export class MeComponent {
             oldPassword: ['',
                 [
                     Validators.required,
-                    Validators.minLength(3)
+                    Validators.minLength(8),
+                    Validators.maxLength(20),
+                    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/)
+
                 ]
             ],
             newPassword: ['',
                 [
                     Validators.required,
-                    Validators.minLength(3)
+                    Validators.minLength(8),
+                    Validators.maxLength(20),
+                    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/)
                 ]
             ],
             confirmPassword: ['',
                 [
                     Validators.required,
-                    Validators.minLength(3)
+                    Validators.minLength(8),
+                    Validators.maxLength(20),
+                    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/)
                 ]
             ],
         });
@@ -84,28 +95,44 @@ export class MeComponent {
 
     public submitChangeEmailOrUsername() {
         const userRequest = this.userForm!.value as ChangeEmailOrUsernameRequest;
-        this.userService.changeEmailOrUsername(userRequest).subscribe(
-            (response: UserInterface) => {
+        this.userService.changeEmailOrUsername(userRequest).subscribe({
+            next: (response: UserInterface) => {
                 localStorage.setItem('token', response.token);
                 this.authService.me().subscribe((user: User) => {
                     this.sessionService.logIn(user);
                     this.router.navigate(['/me'])
                 });
                 this.router.navigate(['/me'])
-            }
-        );
+            },
+            error: (err: HttpErrorResponse) => {
+                this.showErrors(err.error);
+            },
+        });
+    }
+
+    private showErrors(errs: Errors): void {
+        let message = Object.values(errs.errors).join(' - ');
+        this.matSnackBar.open(
+            message, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+        });
     }
 
     public submitChangePassword() {
         const passwordRequest = this.passwordForm!.value as ChangePasswordRequest;
         this.userService.changePassword(passwordRequest).subscribe(
             (response: User) => {
-                    this.sessionService.logIn(response);
-                    this.router.navigate(['/me'])
-                    this.changingPassword = false;
+                this.sessionService.logIn(response);
+                this.router.navigate(['/me'])
+                this.changingPassword = false;
             }
         );
     }
 
-
+    public logout(): void {
+        this.sessionService.logOut();
+        this.router.navigate(['/login'])
+    }
 }

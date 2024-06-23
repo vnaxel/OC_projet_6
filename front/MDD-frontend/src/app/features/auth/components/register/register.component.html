@@ -3,6 +3,9 @@
         <mat-card-header fxLayoutAlign="center center">
             <mat-card-title>Register</mat-card-title>
         </mat-card-header>
+        <span routerLink="/">
+            <mat-icon>arrow_back</mat-icon>
+        </span>
         <form class="register-form" [formGroup]="form" (ngSubmit)="submit()">
             <mat-card-content fxLayout="column">
                 <mat-form-field fxFlex>

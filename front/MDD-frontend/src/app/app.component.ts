@@ -23,16 +23,10 @@ export class AppComponent implements OnInit {
       this.router.navigate(['/publications']);
       return;
     }
-    this.router.navigate(['/login']);
   }
 
   public $isLogged(): Observable<boolean> {
     return this.sessionService.$isLogged();
-  }
-
-  public logout(): void {
-    this.sessionService.logOut();
-    this.router.navigate(['/login'])
   }
 
   public autoLog(): void {
@@ -45,5 +39,9 @@ export class AppComponent implements OnInit {
         this.sessionService.logOut();
       }
     )
+  }
+
+  public shouldDisplayTopBar(): boolean {
+    return this.router.url !== '/';
   }
 }
