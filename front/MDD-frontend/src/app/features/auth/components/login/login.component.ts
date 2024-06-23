@@ -18,23 +18,20 @@ import { Errors } from '../../interfaces/errors.interface';
 })
 export class LoginComponent {
     public hide = true;
-    public onError = false;
+    public errors: string | undefined;
 
     public form = this.fb.group({
-        emailOrUsername: [
-            '',
-            [
-                Validators.required,
-                Validators.min(3)
-            ]
-        ],
-        password: [
-            '',
-            [
-                Validators.required,
-                Validators.min(3)
-            ]
-        ]
+        emailOrUsername: ['', [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(20),
+        ]],
+        password: ['', [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.maxLength(20),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/)
+        ]],
     });
     constructor(private authService: AuthService,
         private fb: FormBuilder,
@@ -58,20 +55,15 @@ export class LoginComponent {
                 });
             },
             error: (err: HttpErrorResponse) => {
-                this.onError = true,
-                    this.showErrors(err.error);
+                this.showErrors(err.error);
             },
         });
     }
 
     private showErrors(errs: Errors): void {
-        let message = Object.values(errs.errors).join(' - ');
-        this.matSnackBar.open(
-            message, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-        });
+        this.errors = errs.errors.join('\n');
+        // efface l'erreur apres 5 secondes
+        setTimeout(() => this.errors = undefined, 5000);
     }
 }
 
