@@ -1,27 +1,24 @@
-<div class="list">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Articles</mat-card-title>
-        </mat-card-header>
-        <button mat-fab color="primary" class="add" routerLink="create">
-            <mat-icon>add</mat-icon>
+<div class="component">
+    <div class="header headerArticleList">
+        <button class="button__purple" routerLink="create">
+            Créer un article
         </button>
-        <div *ngIf="!subscribedTopics$ || subscribedTopics$.length === 0">
-            Souscrivez d'abord a des themes
+    </div>
+    <div *ngIf="!subscribedTopics$ || subscribedTopics$.length === 0">
+        Souscrivez d'abord a des themes
+    </div>
+    <div class="grid">
+        <div class="article card" *ngFor="let article of (articles$ | async)" [routerLink]="['article', article.id]">
+            <h3 class="article__title">{{ article.title }}</h3>
+            <div class="article__subtitle">
+                <span>{{ article.created_at | date }}</span>
+                <div class="article__subtitle__group">
+                    <span>{{ article.author.username }}</span>
+                    <span>{{ article.author.email }}</span>
+                </div>
+            </div>
+            <p>{{ article.content }}</p>
+            <p class="article__topic">Theme : {{ article.topic }}</p>
         </div>
-        <mat-card-content>
-            <ul>
-                <li *ngFor="let article of (articles$ | async)">
-                    <h3 matLine>{{ article.title }}</h3>
-                    <p matLine>{{ article.topic }}</p>
-                    <p matLine>{{ article.author.username }}</p>
-                    <p matLine>{{ article.author.email }}</p>
-                    <p matLine>{{ article.created_at | date }}</p>
-                    <p matLine>{{ article.updated_at | date }}</p>
-                    <button mat-raised-button color="primary" [routerLink]="['article', article.id]">Read</button>
-                </li>
-            </ul>
-        </mat-card-content>
-    </mat-card>
-
+    </div>
 </div>

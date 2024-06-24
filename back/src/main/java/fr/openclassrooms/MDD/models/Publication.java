@@ -25,6 +25,7 @@ public class Publication {
     String title;
 
     @NotNull
+    @Column(length = 65535)
     String content;
 
     LocalDateTime createdAt;
