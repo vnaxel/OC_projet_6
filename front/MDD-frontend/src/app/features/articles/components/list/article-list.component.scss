@@ -11,13 +11,11 @@
 .grid {
     width: 80%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-flow: dense;
     gap: 1rem;
 }
 @media (max-width: 520px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
     .headerArticleList {
         flex-direction: column;
     }
@@ -27,6 +25,15 @@
     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
     border-radius: 1rem;
     padding: 1rem;
+    transition: 100ms;
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+        cursor: pointer;
+        transform: scale(1.01);
+    }
+    & p {
+        word-break: break-word;
+    }
     &___title {
         font-size: 1.5rem;
         font-weight: 700;

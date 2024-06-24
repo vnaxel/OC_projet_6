@@ -39,9 +39,16 @@ export class ArticleComponent {
 
     public submitComment(): void {
         const commentRequest = this.commentForm.value as CommentPublicationRequest;
-        
+        this.commentForm.reset();
         this.articleService.commentPublication(this.article!.id, commentRequest).subscribe(
             () => this.ngOnInit()
         );
     }
+
+    submitForm() {
+        this.commentForm.markAllAsTouched();
+        if (this.commentForm.valid) {
+          this.submitComment();
+        }
+      }
 }

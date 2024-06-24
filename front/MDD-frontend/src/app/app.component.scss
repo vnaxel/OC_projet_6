@@ -135,6 +135,7 @@
         display: none;
     }
     &:hover {
+        cursor: pointer;
         color: $color-primary;
         & .svg-inactive {
             display: none;

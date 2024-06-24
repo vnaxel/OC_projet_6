@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-$color-primary: #6600cc;
+$color-primary: #7763C5;
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .formField {
@@ -27,9 +28,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     cursor: pointer;
     font-weight: 700;
     width: min-content;
-    background-color: #7763C5;
+    background-color: $color-primary;
+    transition: 100ms;
     &:hover {
-        background-color: #5f4db6;
+        background-color: darken($color-primary, 10%);
     }
     &:disabled {
         background-color: #c0c0c0;
@@ -75,17 +77,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     left: 1rem;
 }
 
-.header {
-    display: flex;
-    margin: 0 0 2rem 0;
-    align-items: center;
 
-    &>h2 {
-        width: 100%;
-        text-align: center;
-        font-weight: 400;
-    }
-}
 
 .component {
     display: flex;
