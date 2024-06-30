@@ -1,60 +1,161 @@
-<div class="me">
-        <div>
-
+<div class="component">
+    <div class="container">
+        <div class="header">
+            <span class="backArrow" routerLink="/publications">
+                <mat-icon>arrow_back</mat-icon>
+            </span>
+            <span (click)="switchMode()" class="autorenew">
+                <mat-icon>autorenew</mat-icon>
+            </span>
             <div>
-                <button mat-icon-button (click)="back()">
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
-                <h1 *ngIf="!this.changingPassword">User information</h1>
-                <h1 *ngIf="this.changingPassword">Change password</h1>
-                <button (click)="switchMode()" *ngIf="this.changingPassword">User
-                    Info</button>
-                <button (click)="switchMode()" *ngIf="!this.changingPassword">Changer
-                    de mot de passe</button>
+                <h2 *ngIf="!this.changingPassword">Profil utilisateur</h2>
+                <h2 *ngIf="this.changingPassword">Changer de mot de passe</h2>
             </div>
-
         </div>
-        <mat-card-content>
-            <div *ngIf="!this.changingPassword && userForm">
-                <form *ngIf="!this.changingPassword" [formGroup]="userForm" (ngSubmit)="submitChangeEmailOrUsername()">
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Username" formControlName="username">
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Email" formControlName="email">
-                    </mat-form-field>
-                    <button [disabled]="userForm.invalid">Submit</button>
-                </form>
+        <div class="forms" *ngIf="!this.changingPassword && userForm">
+            <form class="form" *ngIf="!this.changingPassword" [formGroup]="userForm"
+                (ngSubmit)="submitChangeEmailOrUsername()">
+                <div class="formField">
+                    <input class="form__input" formControlName="username">
+                </div>
+                <div class="formField">
+                    <input class="form__input" formControlName="email">
+                </div>
+                <button class="button__purple" [disabled]="userForm.invalid">Sauvegarder</button>
+            </form>
+            <span (click)="logout()" class="link disconnect">Se déconnecter</span>
+            <div class="error" *ngIf="this.userForm?.hasError">
+                <span class="formError"
+                    *ngIf="this.userForm?.controls?.['username']?.errors?.['required'] && this.userForm?.controls?.['username']?.touched">⚠️
+                    - Le
+                    nom
+                    d'utilisateur est requis</span>
+                <span class="formError"
+                    *ngIf="this.userForm?.controls?.['username']?.errors?.['minlength'] && this.userForm?.controls?.['username']?.touched">⚠️
+                    - Le
+                    nom
+                    d'utilisateur doit faire au moins 4 caractères</span>
+                <span class="formError"
+                    *ngIf="this.userForm?.controls?.['username']?.errors?.['maxlength'] && this.userForm?.controls?.['username']?.touched">⚠️
+                    - Le
+                    nom
+                    d'utilisateur ne doit pas faire plus de 20 caractères</span>
+                <span class="formError"
+                    *ngIf="this.userForm?.controls?.['email']?.errors?.['required'] && this.userForm?.controls?.['email']?.touched">⚠️
+                    - L'email
+                    est
+                    requis</span>
+                <span class="formError"
+                    *ngIf="this.userForm?.controls?.['email']?.errors?.['email'] && this.userForm?.controls?.['email']?.touched">⚠️
+                    - L'email n'est
+                    pas un
+                    email valide</span>
+                <span class="formError" *ngIf="this.userFormErrors">⚠️ - Une erreur est survenue : {{
+                    this.userFormErrors
+                    }}</span>
             </div>
-            <div *ngIf="this.changingPassword && passwordForm">
-                <form *ngIf="this.changingPassword" [formGroup]="passwordForm" (ngSubmit)="submitChangePassword()">
-                    <mat-form-field fxFlex appearance="outline">
-                        <input matInput placeholder="Old password" formControlName="oldPassword">
-                    </mat-form-field>
-                    <mat-form-field fxFlex appearance="outline">
-                        <input matInput placeholder="New password" formControlName="newPassword">
-                    </mat-form-field>
-                    <div *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.invalid">
-                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is
-                            required.</mat-error>
-                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">New password must be
-                            at least
-                            8 characters long.</mat-error>
-                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['maxlength']">New password must be
-                            no more
-                            than 20 characters long.</mat-error>
-                        <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']">New password must
-                            include at
-                            least one uppercase letter, one lowercase letter, one digit, and one special
-                            character.</mat-error>
-                    </div>
-                    <mat-form-field fxFlex appearance="outline">
-                        <input matInput placeholder="Confirm new password" formControlName="confirmPassword">
-                    </mat-form-field>
-                    <button [disabled]="passwordForm.invalid">Submit</button>
-                </form>
+        </div>
+        <div class="forms" *ngIf="this.changingPassword && passwordForm">
+            <form class="form" *ngIf="this.changingPassword" [formGroup]="passwordForm"
+                (ngSubmit)="submitChangePassword()">
+                <div class="formField">
+                    <input type="password" class="form__input" placeholder="Ancien mot de passe"
+                        formControlName="oldPassword">
+                </div>
+                <div class="formField">
+                    <input type="password" class="form__input" placeholder="Nouveau mot de passe"
+                        formControlName="newPassword">
+                </div>
+                <div class="formField">
+                    <input type="password" class="form__input" placeholder="Confirmation du nouveau mot de passe"
+                        formControlName="confirmPassword">
+                </div>
+                <button class="button__purple" [disabled]="passwordForm.invalid">Changer</button>
+            </form>
+            <div class="error" *ngIf="this.passwordForm?.hasError">
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['oldPassword']?.errors?.['required'] && this.passwordForm?.controls?.['oldPassword']?.touched">⚠️
+                    - L'ancien
+                    mot de
+                    passe est requis</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['oldPassword']?.errors?.['minlength'] && this.passwordForm?.controls?.['oldPassword']?.touched">⚠️
+                    - L'ancien
+                    mot de
+                    passe doit faire au moins 8 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['oldPassword']?.errors?.['maxlength'] && this.passwordForm?.controls?.['oldPassword']?.touched">⚠️
+                    - L'ancien
+                    mot de
+                    passe ne doit pas faire plus de 20 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['oldPassword']?.errors?.['pattern'] && this.passwordForm?.controls?.['oldPassword']?.touched">⚠️
+                    - L'ancien
+                    mot de
+                    passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère
+                    spécial
+                    parmis ceux-ci : &#64; $ ! % * ? &</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['newPassword']?.errors?.['required'] && this.passwordForm?.controls?.['newPassword']?.touched">⚠️
+                    - Le nouveau
+                    mot de
+                    passe est requis</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['newPassword']?.errors?.['minlength'] && this.passwordForm?.controls?.['newPassword']?.touched">⚠️
+                    - Le nouveau
+                    mot de
+                    passe doit faire au moins 8 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['newPassword']?.errors?.['maxlength'] && this.passwordForm?.controls?.['newPassword']?.touched">⚠️
+                    - Le nouveau
+                    mot de
+                    passe ne doit pas faire plus de 20 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['newPassword']?.errors?.['pattern'] && this.passwordForm?.controls?.['newPassword']?.touched">⚠️
+                    - Le nouveau
+                    mot de
+                    passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère
+                    spécial
+                    parmis ceux-ci : &#64; $ ! % * ? &</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['confirmPassword']?.errors?.['required'] && this.passwordForm?.controls?.['confirmPassword']?.touched">⚠️
+                    - La confirmation du
+                    mot de
+                    passe est requise</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['confirmPassword']?.errors?.['minlength'] && this.passwordForm?.controls?.['confirmPassword']?.touched">⚠️
+                    - La confirmation du
+                    mot de
+                    passe doit faire au moins 8 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['confirmPassword']?.errors?.['maxlength'] && this.passwordForm?.controls?.['confirmPassword']?.touched">⚠️
+                    - La confirmation du
+                    mot de
+                    passe ne doit pas faire plus de 20 caractères</span>
+                <span class="formError"
+                    *ngIf="this.passwordForm?.controls?.['confirmPassword']?.errors?.['pattern'] && this.passwordForm?.controls?.['confirmPassword']?.touched">⚠️
+                    - La confirmation du
+                    mot de
+                    passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère
+                    spécial
+                    parmis ceux-ci : &#64; $ ! % * ? &</span>
+                <span class="formError" *ngIf="this.passwordFormErrors">⚠️ - Une erreur est survenue : {{
+                    this.passwordFormErrors
+                    }}</span>
             </div>
-            <span (click)="logout()" class="link">Se Déconnecter</span>
-
-        </mat-card-content>
+        </div>
+        <div class="topics">
+            <hr class="line">
+            <h2>Abonnements</h2>
+            <div class="topicsGrid" *ngIf="subscribedTopics$ | async as topics">
+                <div class="topic card" *ngFor="let topic of topics">
+                    <h3>{{ topic}}</h3>
+                    <p>Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda doloribus
+                        dolorum
+                        suscipit, delectus distinctio impedit recusandae...</p>
+                    <button class="button__purple" (click)="unsubscribeToTopic(topic)">Se désabonner</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -11,6 +11,8 @@ import { ChangePasswordRequest } from '../../interfaces/changePasswordRequest.in
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Errors } from '../../features/auth/interfaces/errors.interface';
+import { TopicService } from '../../features/topics/services/topic.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-me',
@@ -20,17 +22,19 @@ import { Errors } from '../../features/auth/interfaces/errors.interface';
 export class MeComponent {
 
     public user: User | undefined;
+    public subscribedTopics$: Observable<string[]> | undefined;
     public changingPassword: boolean = false;
     public userForm: FormGroup | undefined;
     public passwordForm: FormGroup | undefined;
+    public userFormErrors: string | undefined;
+    public passwordFormErrors: string | undefined;
 
     constructor(
         private authService: AuthService,
         private userService: UserService,
-        private route: ActivatedRoute,
-        private matSnackBar: MatSnackBar,
         private fb: FormBuilder,
         private sessionService: SessionService,
+        private topicService: TopicService,
         private router: Router
     ) { }
 
@@ -39,6 +43,7 @@ export class MeComponent {
             (user: User) => {
                 this.user = user
                 this.initChangeEmailOrUsernameForm();
+                this.subscribedTopics$ = this.sessionService.getUserInterrestedTopics();
             }
         )
     }
@@ -51,9 +56,13 @@ export class MeComponent {
         this.changingPassword = !this.changingPassword;
         if (this.changingPassword) {
             this.initPasswordForm();
+            this.userForm?.reset();
+            this.userFormErrors = undefined;
             return
         }
         this.initChangeEmailOrUsernameForm();
+        this.passwordForm?.reset();
+        this.passwordFormErrors = undefined;
     }
 
     public initPasswordForm() {
@@ -88,8 +97,19 @@ export class MeComponent {
 
     public initChangeEmailOrUsernameForm() {
         this.userForm = this.fb.group({
-            username: [this.user!.username],
-            email: [this.user!.email]
+            username: [this.user?.username || '',
+                [
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(20),
+                ]
+            ],
+            email: [this.user?.email || '',
+                [
+                    Validators.required,
+                    Validators.email,
+                ]
+            ]
         });
     }
 
@@ -105,34 +125,47 @@ export class MeComponent {
                 this.router.navigate(['/me'])
             },
             error: (err: HttpErrorResponse) => {
-                this.showErrors(err.error);
+                this.showUserErrors(err.error);
             },
         });
     }
 
-    private showErrors(errs: Errors): void {
-        let message = Object.values(errs.errors).join(' - ');
-        this.matSnackBar.open(
-            message, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-        });
+    private showUserErrors(errs: Errors): void {
+        this.userFormErrors = errs.errors.join('\n');
+        // efface l'erreur apres 5 secondes
+        setTimeout(() => this.userFormErrors = undefined, 5000);
     }
 
     public submitChangePassword() {
         const passwordRequest = this.passwordForm!.value as ChangePasswordRequest;
-        this.userService.changePassword(passwordRequest).subscribe(
-            (response: User) => {
+        this.userService.changePassword(passwordRequest).subscribe({
+            next: (response: User) => {
                 this.sessionService.logIn(response);
                 this.router.navigate(['/me'])
                 this.changingPassword = false;
-            }
-        );
+            },
+            error: (err: HttpErrorResponse) => {
+                this.showPasswordErrors(err.error);
+            },
+    });
+    }
+
+    private showPasswordErrors(errs: Errors): void {
+        this.passwordFormErrors = errs.errors.join('\n');
+        // efface l'erreur apres 5 secondes
+        setTimeout(() => this.passwordFormErrors = undefined, 5000);
     }
 
     public logout(): void {
         this.sessionService.logOut();
         this.router.navigate(['/login'])
+    }
+
+
+    public unsubscribeToTopic(topic: string): void {
+        this.topicService.unsubscribeToTopic(topic).subscribe((user) => {
+            this.sessionService.logIn(user);
+            this.ngOnInit();
+        });
     }
 }

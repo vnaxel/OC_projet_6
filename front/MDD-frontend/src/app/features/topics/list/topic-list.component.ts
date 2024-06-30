@@ -19,11 +19,4 @@ export class TopicListComponent {
             this.subscribedTopics$ = user.interestedTopics;
         });
     }
-
-    public unsubscribeToTopic(topic: string): void {
-        this.topicService.unsubscribeToTopic(topic).subscribe((user) => {
-            this.sessionService.logIn(user);
-            this.subscribedTopics$ = user.interestedTopics;
-        });
-    }
 }

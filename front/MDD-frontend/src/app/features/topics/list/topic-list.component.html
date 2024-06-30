@@ -6,8 +6,7 @@
                 suscipit, delectus distinctio impedit recusandae...</p>
             <button class="button__purple" *ngIf="!subscribedTopics$.includes(topic)"
                 (click)="subscribeToTopic(topic)">S'abonner</button>
-            <button class="button__purple" *ngIf="subscribedTopics$.includes(topic)" disabled
-                (click)="unsubscribeToTopic(topic)">Abonné</button>
+            <button class="button__purple" *ngIf="subscribedTopics$.includes(topic)" disabled>Abonné</button>
         </div>
     </div>
 </div>
