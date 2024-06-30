@@ -4,6 +4,8 @@ import { ArticleService } from '../../services/article.service';
 import { Article } from '../../intefaces/article.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommentPublicationRequest } from '../../intefaces/commentPublicationRequest';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Errors } from '../../../auth/interfaces/errors.interface';
 
 @Component({
     selector: 'app-article',
@@ -12,6 +14,7 @@ import { CommentPublicationRequest } from '../../intefaces/commentPublicationReq
 })
 export class ArticleComponent {
     public article: Article | undefined;
+    public errors: string | undefined;
     public commentForm = this.fb.group({
         content: [
             '',
@@ -40,9 +43,19 @@ export class ArticleComponent {
     public submitComment(): void {
         const commentRequest = this.commentForm.value as CommentPublicationRequest;
         this.commentForm.reset();
-        this.articleService.commentPublication(this.article!.id, commentRequest).subscribe(
-            () => this.ngOnInit()
+        this.articleService.commentPublication(this.article!.id, commentRequest).subscribe({
+            next: () => this.ngOnInit(),
+            error: (err: HttpErrorResponse) => {
+                this.showErrors(err.error);
+            },
+        }
         );
+    }
+
+    private showErrors(errs: Errors): void {
+        this.errors = errs.errors.join('\n');
+        // efface l'erreur apres 5 secondes
+        setTimeout(() => this.errors = undefined, 5000);
     }
 
     submitForm() {

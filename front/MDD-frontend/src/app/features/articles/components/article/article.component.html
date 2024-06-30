@@ -3,21 +3,19 @@
         <span class="backArrow" routerLink="/publications">
             <mat-icon>arrow_back</mat-icon>
         </span>
-        <div class="">
-            <div class="header">
-                <h2 class="header__title">{{ article?.title }}</h2>
-                <div class="header__subtitle">
-                    <span>{{ article?.created_at | date }}</span>
-                    <div class="header__subtitle__group">
-                        <span>{{ article?.author?.username }}</span>
-                        <span>{{ article?.author?.email }}</span>
-                    </div>
-                    <span>Thème : {{ article?.topic }}</span>
+        <div class="header">
+            <h2 class="header__title">{{ article?.title }}</h2>
+            <div class="header__subtitle">
+                <span>{{ article?.created_at | date }}</span>
+                <div class="header__subtitle__group">
+                    <span>{{ article?.author?.username }}</span>
+                    <span>{{ article?.author?.email }}</span>
                 </div>
+                <span>Thème : {{ article?.topic }}</span>
             </div>
-            <div class="article__content">
-                <p>{{ article?.content }}</p>
-            </div>
+        </div>
+        <div class="article__content">
+            <p>{{ article?.content }}</p>
         </div>
         <hr class="line">
         <div class="comments card">
@@ -30,14 +28,23 @@
         <form class="createComment" [formGroup]="commentForm" (ngSubmit)="submitComment()">
             <div class="formField">
                 <textarea placeholder="Écrivez ici votre commentaire" formControlName="content"></textarea>
-                <span (click)="submitForm()" class="icon__send"><svg width="49" height="49" viewBox="0 0 49 49" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                <span (click)="submitForm()" class="icon__send"><svg width="49" height="49" viewBox="0 0 49 49"
+                        fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M45.9999 3L22.3499 26.65" stroke="#7763C5" stroke-width="5" stroke-linecap="round"
                             stroke-linejoin="round" />
                         <path d="M46 3L30.95 46L22.35 26.65L3 18.05L46 3Z" stroke="#7763C5" stroke-width="5"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </span>
+            </div>
+            <div class="error" *ngIf="this.commentForm">
+                <span class="formError"
+                    *ngIf="this.commentForm.controls.content.errors?.['required'] && this.commentForm.controls.content.touched">⚠️
+                    - Le commentaire ne peut pas être vide</span>
+                <span class="formError"
+                    *ngIf="this.commentForm.controls.content.errors?.['minlength'] && this.commentForm.controls.content.touched">⚠️
+                    - Le commentaire doit faire au moins 3 caractères</span>
+                <span class="formError" *ngIf="this.errors">⚠️ - Une erreur est survenue : {{ this.errors }}</span>
             </div>
         </form>
     </div>

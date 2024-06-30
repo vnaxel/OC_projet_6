@@ -102,20 +102,26 @@
             }
             &__checkbox:checked ~ .nav__toggle__hamburger::before {
                 transform: rotate(45deg);
+                background: transparent;
                 top: 0;
                 right: 6rem;
             }
             &__checkbox:checked ~ .nav__toggle__hamburger::after {
                 transform: rotate(-45deg);
+                background: transparent;
                 top: 0;
                 right: 6rem;
             }
             &__checkbox:checked ~ .nav__toggle__group {
                 right: 0;
+                position: fixed;
+                z-index: 4;
             }
             &__checkbox:checked {
-                left: auto;
-                right: 6rem;
+                right: 0;
+                position: fixed;
+                height: 100vh;
+                width: 100vw;
             }
         }
     }

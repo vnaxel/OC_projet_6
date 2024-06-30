@@ -1,6 +1,6 @@
 <div class="component">
     <div class="header headerArticleList">
-        <button class="button__purple" routerLink="create">
+        <button class="button__purple" routerLink="create" [disabled]="!subscribedTopics$ || subscribedTopics$.length === 0">
             Créer un article
         </button>
     </div>

@@ -93,7 +93,7 @@
 
 .formField {
     & textarea {
-        min-height: 5rem;
+        min-height: 7rem;
         border-radius: 1rem;
         border: 1px solid black;
         display: block;
@@ -101,6 +101,10 @@
         resize: vertical;
         padding: 1rem;
         font-family: inherit;
+        &:focus {
+            outline: none;
+            border: 2px solid $color-primary;
+        }
     }
     position: relative;
     & .icon__send {
@@ -133,6 +137,7 @@
     .formField {
         & .icon__send {
             right: 1rem;
+            bottom: .5rem;
         }
     }
 }

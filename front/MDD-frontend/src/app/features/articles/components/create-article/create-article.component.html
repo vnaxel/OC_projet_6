@@ -1,23 +1,43 @@
-<div class="create">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Create Article</mat-card-title>
-        </mat-card-header>
-        <form class="create-form" [formGroup]="articleForm" (ngSubmit)="submit()">
-            <mat-card-content fxLayout="column">
-                <mat-form-field fxFlex>
-                    <input matInput placeholder="Title" formControlName="title">
-                </mat-form-field>
-                <mat-form-field fxFlex>
-                    <input matInput placeholder="Content" formControlName="content">
-                </mat-form-field>
-                <mat-form-field fxFlex>
-                    <mat-select *ngIf="user" ngDefaultControl formControlName="topic">
-                        <mat-option *ngFor="let theme of user?.interestedTopics" [value]="theme">{{ theme }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-card-content>
-            <button mat-raised-button color="primary" [disabled]="articleForm.invalid" type="submit">Submit</button>
+<div class="component">
+    <div class="container">
+        <span class="backArrow" routerLink="/publications">
+            <mat-icon>arrow_back</mat-icon>
+        </span>
+        <div class="header">
+            <h2 class="header__title">Créer un nouvel article</h2>
+        </div>
+        <form class="form" [formGroup]="articleForm" (ngSubmit)="submit()">
+            <div class="formField">
+                <select class="form__input" *ngIf="user" formControlName="topic">
+                    <option class="placeholder" [value]="''" disabled selected hidden>Sélectionner un thème</option>
+                    <option *ngFor="let theme of user?.interestedTopics" [value]="theme">{{ theme }}</option>
+                </select>
+            </div>
+            <div class="formField">
+                <input class="form__input" placeholder="Titre de l'article" formControlName="title">
+            </div>
+            <div class="formField">
+                <textarea class="form__input" placeholder="Contenu de l'article" formControlName="content"></textarea>
+            </div>
+            <button class="button__purple" [disabled]="articleForm.invalid" type="submit">Créer</button>
+            <div class="error" *ngIf="this.articleForm.hasError">
+                <span class="formError"
+                    *ngIf="this.articleForm.controls.topic.errors?.['required'] && this.articleForm.controls.topic.touched">⚠️
+                    - Le thème est requis</span>
+                <span class="formError"
+                    *ngIf="this.articleForm.controls.title.errors?.['minlength'] && this.articleForm.controls.title.touched">⚠️
+                    - Le titre doit faire un minimum de 3 caractères</span>
+                <span class="formError"
+                    *ngIf="this.articleForm.controls.title.errors?.['required'] && this.articleForm.controls.title.touched">⚠️
+                    - Le titre est requis</span>
+                <span class="formError"
+                    *ngIf="this.articleForm.controls.content.errors?.['minlength'] && this.articleForm.controls.content.touched">⚠️
+                    - Le contenu doit faire un minimum de 3 caractères</span>
+                <span class="formError"
+                    *ngIf="this.articleForm.controls.content.errors?.['required'] && this.articleForm.controls.content.touched">⚠️
+                    - Le contenu est requis</span>
+                <span class="formError" *ngIf="this.errors">⚠️ - Une erreur est survenue : {{ this.errors }}</span>
+            </div>
         </form>
-    </mat-card>
+    </div>
 </div>

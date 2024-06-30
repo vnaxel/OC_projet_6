@@ -17,7 +17,7 @@
             <div class="nav__toggle__group">
                 <div *ngIf="$isLogged() | async;" class="nav__toggle__group__child">
                     <span [routerLink]="['/publications']" [routerLinkActive]="['is-active']" class="link">Articles</span>
-                    <span [routerLink]="['/themes']" [routerLinkActive]="['is-active']" class="link">Themes</span>
+                    <span [routerLink]="['/themes']" [routerLinkActive]="['is-active']" class="link">Thèmes</span>
                 </div>
                 <div *ngIf="$isLogged() | async;" class="nav__toggle__group__child">
                     <span [routerLink]="['/me']" [routerLinkActive]="['is-active']" class="link">
