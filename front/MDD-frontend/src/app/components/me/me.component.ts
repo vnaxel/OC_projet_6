@@ -142,6 +142,7 @@ export class MeComponent {
             next: (response: User) => {
                 this.sessionService.logIn(response);
                 this.router.navigate(['/me'])
+                this.initChangeEmailOrUsernameForm();
                 this.changingPassword = false;
             },
             error: (err: HttpErrorResponse) => {

@@ -18,7 +18,7 @@
             <p>{{ article?.content }}</p>
         </div>
         <hr class="line">
-        <div class="comments card">
+        <div *ngIf="this.article?.comments?.length" class="comments card">
             <h2 class="comments__title">Commentaires</h2>
             <div class="comments__comment" *ngFor="let comment of article?.comments">
                 <p class="comments__comment__author">{{ comment.author.username }}</p>

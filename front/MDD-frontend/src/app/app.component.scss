@@ -55,6 +55,9 @@
                 &__child {
                     flex-direction: column;
                     gap: 2rem;
+                    &:last-of-type {
+                        margin-bottom: .7rem;
+                    }
                 }
             }
             &__hamburger {
