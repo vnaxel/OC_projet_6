@@ -3,7 +3,7 @@
 Depuis le dossier front/MDD-frontend
 
 Run `npm i`
-Puis `npm run start`
+Puis `ng serve`
 Le frontend est maintenant accessible à l'adresse http://localhost:4200
 
 
