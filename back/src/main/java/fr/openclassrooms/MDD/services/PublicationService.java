@@ -21,6 +21,16 @@ public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
 
+    /**
+     * createPublication receives a PublicationRequest object and a UserDetails object.
+     * The method retrieves the user from the database using the userRepository bean.
+     * The method creates a new Publication object with the information provided in the request.
+     * The publication is saved in the database using the publicationRepository bean.
+     * The method returns a PublicationDto object.
+     * @param publicationRequest - The request object containing the publication information.
+     * @param userDetails - The object containing the user information.
+     * @return PublicationDto - The response object containing the publication information.
+     * */
     public PublicationDto createPublication(PublicationRequest publicationRequest, UserDetails userDetails) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -46,6 +56,14 @@ public class PublicationService {
                 .build();
     }
 
+    /**
+     * getAllPublicationsForUser receives a UserDetails object.
+     * The method retrieves the user from the database using the userRepository bean.
+     * The method retrieves all publications from the database that have a topic that the user is interested in.
+     * The method returns a list of PublicationDto objects.
+     * @param userDetails - The object containing the user information.
+     * @return List<PublicationDto> - The list of response objects containing the publication information.
+     * */
     public List<PublicationDto> getAllPublicationsForUser(UserDetails userDetails) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -56,6 +74,13 @@ public class PublicationService {
                 .toList();
     }
 
+    /**
+     * getPublicationById receives a publication id.
+     * The method retrieves the publication from the database using the publicationRepository bean.
+     * The method returns a PublicationDto object.
+     * @param id - The id of the publication to retrieve.
+     * @return PublicationDto - The response object containing the publication information.
+     * */
     public PublicationDto getPublicationById(Long id) {
         return publicationRepository.findById(id)
                 .map(Publication::toDto)

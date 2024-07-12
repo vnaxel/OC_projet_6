@@ -21,6 +21,19 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
+    /**
+     * createComment receives a CommentRequest object, a UserDetails object, and a publicationId.
+     * The method retrieves the user from the database using the userRepository bean.
+     * The method retrieves the publication from the database using the publicationRepository bean.
+     * The method creates a new Comment object with the information provided in the request.
+     * The comment is saved in the database using the commentRepository bean.
+     * The method retrieves the publication from the database using the publicationRepository bean.
+     * The method returns a PublicationDto object.
+     * @param commentRequest - The request object containing the comment information.
+     * @param userDetails - The object containing the user information.
+     * @param publicationId - The id of the publication where the comment will be added.
+     * @return PublicationDto - The response object containing the publication information.
+     * */
     public PublicationDto createComment(CommentRequest commentRequest, UserDetails userDetails, Long publicationId) {
         var user = userRepository.findByEmailOrUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

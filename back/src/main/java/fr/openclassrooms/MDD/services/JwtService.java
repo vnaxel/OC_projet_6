@@ -24,14 +24,29 @@ public class JwtService {
     @Value("${token.expirationms}")
     Long jwtExpirationMs;
 
+    /**
+     * extractUserName receives a JWT token and extracts the username from the token.
+     * @param token - The JWT token.
+     * @return String - The username extracted from the token.
+     * */
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    /**
+     * isTokenValid receives a JWT token and a UserDetails object.
+     * The method extracts the username from the token and compares it with the username in the UserDetails object.
+     * The method also checks if the token is expired.
+     * The method returns a boolean indicating if the token is valid.
+     * @param token - The JWT token.
+     * @param userDetails - The object containing the user information.
+     * @return boolean - A boolean indicating if the token is valid.
+     * */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
@@ -42,6 +57,14 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
+    /**
+     * generateToken receives a Map object and a UserDetails object.
+     * The method generates a JWT token using the information provided in the map and the user details.
+     * The method returns a JWT token.
+     * @param extraClaims - The map containing the extra information to be added to the token.
+     * @param userDetails - The object containing the user information.
+     * @return String - The JWT token.
+     * */
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()
